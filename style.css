@@ -359,3 +359,23 @@ input[aria-invalid=true]::placeholder{color:#a66d6d;opacity:1}
 .view-tabs button,.view-tabs button.selected{background:transparent;box-shadow:none;height:26px;padding:3px 8px;transition:color .22s ease}
 @media(max-width:650px){.view-tabs{grid-template-columns:repeat(2,82px)}.view-tabs button{height:25px;padding:3px 8px}}
 @media(prefers-reduced-motion:reduce){.view-tabs::before,.view-tabs button{transition:none}}
+
+/* Keep native time controls inside their columns on narrow phones. */
+.time-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.time-fields>label{min-width:0}
+.time-fields #start,.time-fields #end{display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box}
+@media(max-width:400px){.time-fields{gap:8px}.time-fields #start,.time-fields #end{padding-left:6px;padding-right:6px;font-size:13px}}
+
+/* Constrain WebKit's native time fields as well as the outer inputs. */
+.time-fields>label{width:100%;max-width:100%;overflow:hidden}
+.time-fields input[type=time]{appearance:none;-webkit-appearance:none;min-inline-size:0;inline-size:100%;overflow:hidden}
+.time-fields input[type=time]::-webkit-datetime-edit{min-width:0;padding:0}
+.time-fields input[type=time]::-webkit-date-and-time-value{min-width:0;text-align:left}
+.time-fields input[type=time]::-webkit-calendar-picker-indicator{flex:0 0 16px;width:16px;margin:0;padding:0}
+@media(max-width:380px){.time-fields{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.time-fields #start,.time-fields #end{font-size:12px;padding:6px 5px}}
+
+/* Extra top space only for the empty tasks tab. */
+.tasks-only .task-scroll.is-empty .add-group{margin-top:18px}
+
+.time-fields #start,.time-fields #end{border:1px solid #ccc;border-radius:9px;background:#fff;min-height:36px}
+@media(max-width:400px){.time-fields>label{font-size:12px}.time-fields input[type=time]::-webkit-calendar-picker-indicator{width:13px;flex-basis:13px}}
