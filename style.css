@@ -244,7 +244,7 @@ main:not(.tasks-only):not(.timeline-only) .plain-todo-group{padding-top:12px;pad
 
 @media(max-width:650px){.study .task-scroll.is-empty .add-group{margin-top:7.5px}}
 
-button.dot{background:transparent;border:0;border-radius:0;display:flex;align-items:center;justify-content:center}button.dot svg{width:100%;height:100%;overflow:visible;stroke:#c8c8c8;stroke-width:12px;stroke-linejoin:round;paint-order:stroke fill}button.dot:hover{box-shadow:none;filter:brightness(.96)}
+button.dot{background:transparent;border:0;border-radius:0;display:flex;align-items:center;justify-content:center}button.dot svg{width:100%;height:100%;overflow:visible;stroke:#222;stroke-width:12px;stroke-linejoin:round;paint-order:stroke fill}button.dot:hover{box-shadow:none;filter:brightness(.96)}
 
 /* Balance the category icon top inset against its left inset. */
 .group{padding-top:12px}
@@ -352,3 +352,10 @@ input[aria-invalid=true]::placeholder{color:#a66d6d;opacity:1}
 #category-picks .category-edit-wrap>button[aria-pressed="true"]{font-size:13px;padding:0 8px}
 #category-picks .category-edit-pencil{width:26px}
 .repeat-ending button:disabled{opacity:.45;cursor:default}
+
+.view-tabs{position:relative;isolation:isolate;width:max-content;grid-template-columns:repeat(2,90px);gap:0;padding:2px;background:#eee;border-radius:12px}
+.view-tabs::before{content:'';position:absolute;z-index:-1;left:2px;top:2px;bottom:2px;width:calc((100% - 4px)/2);background:white;border-radius:10px;box-shadow:0 1px 4px #0001;transform:translateX(0);transition:transform .22s ease}
+.view-tabs[data-view="tasks"]::before{transform:translateX(100%)}
+.view-tabs button,.view-tabs button.selected{background:transparent;box-shadow:none;height:26px;padding:3px 8px;transition:color .22s ease}
+@media(max-width:650px){.view-tabs{grid-template-columns:repeat(2,82px)}.view-tabs button{height:25px;padding:3px 8px}}
+@media(prefers-reduced-motion:reduce){.view-tabs::before,.view-tabs button{transition:none}}
