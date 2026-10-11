@@ -391,3 +391,7 @@ input[aria-invalid=true]::placeholder{color:#a66d6d;opacity:1}
 .account-bar button.profile-only{width:28px;height:28px;padding:0;border:0;border-radius:50%;overflow:hidden;display:grid;place-items:center}.profile-only img{width:100%;height:100%;object-fit:cover}.profile-only svg{width:20px;height:20px}.profile-only:focus-visible{outline:2px solid #888;outline-offset:3px}
 
 header .account-bar{margin:0;max-width:none;justify-content:flex-start;flex-shrink:0}header .header-actions{display:flex;align-items:center;gap:5px;flex-shrink:0;margin-right:0}header .header-actions #calendar-open{display:grid;place-items:center;padding:5px}header .account-bar #cloud-account:not(.profile-only){font-size:11px;padding:5px 6px;white-space:nowrap}
+
+.tasks-only .task-list.scrolling-tasks{max-height:none!important;overflow:visible}
+
+header .account-bar{gap:6px}.account-bar .brand-logo{width:28px;height:28px;object-fit:contain}.account-bar button.profile-only{width:24px;height:24px}.profile-only svg{width:18px;height:18px}
