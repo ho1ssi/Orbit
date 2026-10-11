@@ -144,11 +144,12 @@ try{const lastView=localStorage.getItem('orbit-last-view');if(lastView==='tasks'
 for(const id of ['editor','group-editor']){const dialog=$(id);let touchY=null;const dismissKeyboard=()=>{const focused=document.activeElement;if(dialog.contains(focused)&&(focused instanceof HTMLInputElement||focused instanceof HTMLTextAreaElement)&&!['hidden','checkbox','range','button','submit'].includes(focused.type))focused.blur()};dialog.addEventListener('touchstart',event=>{touchY=event.touches[0]?.clientY??null},{passive:true});dialog.addEventListener('touchmove',event=>{if(touchY!==null&&Math.abs((event.touches[0]?.clientY??touchY)-touchY)>12)dismissKeyboard()},{passive:true});dialog.addEventListener('touchend',()=>{touchY=null},{passive:true});dialog.addEventListener('wheel',dismissKeyboard,{passive:true})}
 
 let clockTarget='start';
-for(let h=0;h<24;h++)$('clock-hour').add(new Option(pad(h),pad(h)));
-for(let m=0;m<60;m++)$('clock-minute').add(new Option(pad(m),pad(m)));
-function openClock(target){clockTarget=target;const value=$(target).value||$('start').value||time(new Date().getHours()*60+new Date().getMinutes());const [h,m]=value.split(':');$('clock-hour').value=h;$('clock-minute').value=m;$('clock-title').textContent=target==='start'?'시작시간':'종료시간';$('clock-clear').hidden=target!=='end';document.activeElement?.blur();$('clock-dialog').showModal()}
+for(const [id,count] of [['clock-hour',24],['clock-minute',60]]){const list=$(id);for(let n=0;n<count;n++){const button=document.createElement('button');button.type='button';button.textContent=pad(n);button.dataset.value=pad(n);button.setAttribute('aria-pressed','false');button.onclick=()=>setClockValue(id,button.dataset.value);list.append(button)}}
+function setClockValue(id,value){$(id).dataset.value=value;for(const button of $(id).children)button.setAttribute('aria-pressed',String(button.dataset.value===value))}
+
+function openClock(target){clockTarget=target;const value=$(target).value||$('start').value||time(new Date().getHours()*60+new Date().getMinutes());const [h,m]=value.split(':');setClockValue('clock-hour',h);setClockValue('clock-minute',m);$('clock-title').textContent=target==='start'?'시작시간':'종료시간';$('clock-clear').hidden=target!=='end';document.activeElement?.blur();$('clock-dialog').showModal();requestAnimationFrame(()=>{for(const id of ['clock-hour','clock-minute']){const list=$(id),button=list.querySelector('[aria-pressed=true]');list.scrollTop=Math.max(0,button.offsetTop-list.offsetTop-(list.clientHeight-button.offsetHeight)/2)}})}
 $('clock-close').onclick=()=>$('clock-dialog').close();
-$('clock-apply').onclick=()=>{$(clockTarget).value=$('clock-hour').value+':'+$('clock-minute').value;if(clockTarget==='start')resetStartPicker();$('error').textContent='';updateDuration();$('clock-dialog').close()};
+$('clock-apply').onclick=()=>{$(clockTarget).value=$('clock-hour').dataset.value+':'+$('clock-minute').dataset.value;if(clockTarget==='start')resetStartPicker();$('error').textContent='';updateDuration();$('clock-dialog').close()};
 $('clock-clear').onclick=()=>{$('end').value='';updateDuration();$('clock-dialog').close()};
 // Lock the underlying page until the last nested modal closes.
 let modalLocked=false,modalScroll=0,oldBodyStyle='';
@@ -157,3 +158,6 @@ new MutationObserver(syncModalLayout).observe(document.body,{subtree:true,attrib
 for(const d of document.querySelectorAll('dialog')){d.addEventListener('close',syncModalLayout);d.addEventListener('touchmove',event=>{if(event.target===d)event.preventDefault()},{passive:false})}
 function adjustForKeyboard(){syncModalLayout();const focused=document.activeElement;if(focused?.closest('dialog[open]')&&focused.matches('input:not([type=hidden]),textarea'))focused.scrollIntoView({block:'nearest'})}
 window.visualViewport?.addEventListener('resize',adjustForKeyboard);window.visualViewport?.addEventListener('scroll',syncModalLayout);window.addEventListener('resize',syncModalLayout);syncModalLayout();
+
+for(const name of ['gesturestart','gesturechange'])document.addEventListener(name,event=>event.preventDefault(),{passive:false});
+document.addEventListener('touchmove',event=>{if(event.touches.length>1)event.preventDefault()},{passive:false});
