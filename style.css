@@ -395,3 +395,14 @@ header .account-bar{margin:0;max-width:none;justify-content:flex-start;flex-shri
 .tasks-only .task-list.scrolling-tasks{max-height:none!important;overflow:visible}
 
 header .account-bar{gap:6px}.account-bar .brand-logo{width:28px;height:28px;object-fit:contain}.account-bar button.profile-only{width:24px;height:24px}.profile-only svg{width:18px;height:18px}
+
+.calendar-week span:first-child,#calendar-days .date-red,.week-day.date-red .week-name,.week-day.date-red .week-number{color:#cf6262}
+.calendar-week span:last-child,#calendar-days .date-blue,.week-day.date-blue .week-name,.week-day.date-blue .week-number{color:#5784bf}
+.week-day.date-red[aria-pressed=true] .week-number,.week-day.date-blue[aria-pressed=true] .week-number{background:white;box-shadow:0 0 0 1px currentColor}
+
+header .account-bar #cloud-account:not(.profile-only){font-size:13px;border:1px solid var(--line);border-radius:12px;padding:7px 12px;background:none;color:inherit}
+.account-bar .brand-logo{border-radius:50%;background:#fff;border:1px solid var(--line);padding:2px;overflow:hidden}
+.account-bar .brand-logo[hidden]{display:none}
+
+header .account-bar #cloud-account:not(.profile-only){display:flex;align-items:center;gap:6px;padding:4px 10px 4px 5px;border-radius:16px}
+header .account-bar #cloud-account .brand-logo{width:22px;height:22px;padding:0;border:0;background:transparent;border-radius:0;object-fit:contain}
