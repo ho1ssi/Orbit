@@ -18,7 +18,7 @@ const colorValue=color=>/^#[0-9a-f]{6}$/i.test(color||'')?color:(colorHex[color]
 const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function showStatus(message){$('status').textContent=message;$('status').style.display='block';setTimeout(()=>$('status').style.display='none',3500)}
 if(!localStorage.getItem('myday-orphan-color-repair-v1')){for(const day of [...Object.values(data),Object.values(data.__repeat||{}).map(rule=>rule.task)]){if(Array.isArray(day))for(const ev of day)if(ev.task==='메롱입니다.'&&ev.category==='')ev.color=''}localStorage.setItem('myday-v1',JSON.stringify(data));localStorage.setItem('myday-orphan-color-repair-v1','1')}
-function persist(){try{localStorage.setItem('myday-v1',JSON.stringify(data));localStorage.setItem('myday-groups-v1',JSON.stringify(groups));return true}catch(e){showStatus('저장 공간이 부족합니다. 백업을 내려받아 주세요.');return false}}
+function persist(){try{if(window.orbitCloud?.active){window.orbitCloud.save();return true}localStorage.setItem('myday-v1',JSON.stringify(data));localStorage.setItem('myday-groups-v1',JSON.stringify(groups));return true}catch(e){showStatus('저장 공간이 부족합니다. 백업을 내려받아 주세요.');return false}}
 const categoryOf=ev=>ev.category===undefined?'일정':(ev.category||'');
 function allGroups(){const names=new Set(groups.map(g=>g.name));const result=groups.slice();for(const ev of items()){const name=categoryOf(ev);if(name&&!names.has(name)){result.push({name,color:ev.color||'blue'});names.add(name)}}return result}
 function render(){const weekdays=['일','월','화','수','목','금','토'];$('date-label').textContent=`${selected.getMonth()+1}월 ${selected.getDate()}일 (${weekdays[selected.getDay()]})`;$('date').value=key(selected);renderGroups();renderTimeline();renderWeekOverview()}
@@ -80,7 +80,7 @@ $('group-delete').onclick=()=>{if(!editingGroup)return;const name=editingGroup;g
 const paletteDrafts=new Map();
 function paletteSnapshot(){return {saved:[...savedColors],edits:{...paletteEdits},hidden:[...hiddenPalette]}}
 function beginPaletteEdit(id){paletteDrafts.set(id,paletteSnapshot())}
-function writePalette(){try{localStorage.setItem('myday-colors-v1',JSON.stringify(savedColors));localStorage.setItem('myday-palette-edits-v1',JSON.stringify(paletteEdits));localStorage.setItem('myday-hidden-colors-v1',JSON.stringify(hiddenPalette))}catch(e){}}
+function writePalette(){if(window.orbitCloud?.active){window.orbitCloud.save();return}try{localStorage.setItem('myday-colors-v1',JSON.stringify(savedColors));localStorage.setItem('myday-palette-edits-v1',JSON.stringify(paletteEdits));localStorage.setItem('myday-hidden-colors-v1',JSON.stringify(hiddenPalette))}catch(e){}}
 function commitPaletteEdit(id){paletteDrafts.delete(id);writePalette();for(const other of paletteDrafts.keys())paletteDrafts.set(other,paletteSnapshot())}
 for(const id of ['editor','group-editor'])$(id).addEventListener('close',()=>{const draft=paletteDrafts.get(id);if(!draft)return;savedColors=draft.saved;paletteEdits=draft.edits;hiddenPalette=draft.hidden;paletteDrafts.delete(id);writePalette()});
 
@@ -128,3 +128,5 @@ function toggleRepeatMode(mode){repeatMode($('repeat-'+mode).getAttribute('aria-
 function syncTimeDisplays(){for(const id of ['start','end']){const value=$(id).value;let label='시간 선택';if(value){const [h,m]=value.split(':').map(Number);label=`${h<12?'오전':'오후'} ${h%12||12}:${pad(m)}`}$(id+'-display').querySelector('span').textContent=label}}
 $('start-display').onclick=()=>{$('start-picker').scrollIntoView({block:'nearest',behavior:'smooth'});$('hour-picks').querySelector('button')?.focus({preventScroll:true})};
 $('end-display').onclick=()=>{$('time-tools').scrollIntoView({block:'nearest',behavior:'smooth'});$('time-tools').querySelector('button')?.focus({preventScroll:true})};
+
+window.orbitState={get:()=>JSON.parse(JSON.stringify({data,groups,savedColors,paletteEdits,hiddenPalette})),set:s=>{data=s.data||{};groups=s.groups||[];savedColors=s.savedColors||[];paletteEdits=s.paletteEdits||{};hiddenPalette=s.hiddenPalette||[];render()},busy:()=>[...document.querySelectorAll('dialog')].some(d=>d.open)};
