@@ -476,3 +476,84 @@ img{-webkit-user-drag:none}
 
 html,body,body *{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none}
 body input,body textarea,body [contenteditable=true],body [contenteditable=true] *{-webkit-user-select:text!important;user-select:text!important;-webkit-touch-callout:default}
+
+/* Wider desktop layout; keep the existing phone layout below 901px. */
+@media (min-width: 901px) {
+  body {
+    padding-left: max(24px, env(safe-area-inset-left));
+    padding-right: max(24px, env(safe-area-inset-right));
+  }
+  body > header,
+  body > main {
+    max-width: 1800px;
+  }
+  body > main:not(.tasks-only):not(.timeline-only):not(.schedule-only) {
+    grid-template-columns: minmax(280px, 3fr) minmax(0, 7fr);
+    gap: 24px;
+  }
+}
+
+@media (min-width: 901px) {
+  body > main.tasks-only {
+    max-width: 1800px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body > main.tasks-only > .study {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+  }
+}
+
+@media (min-width: 901px) {
+  body > main.tasks-only #groups {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 901px) {
+  body > main:not(.tasks-only):not(.timeline-only):not(.schedule-only) #groups {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    align-items: stretch;
+  }
+  body > main:not(.tasks-only):not(.timeline-only):not(.schedule-only) #groups > .plain-todo-group,
+  body > main:not(.tasks-only):not(.timeline-only):not(.schedule-only) #groups > .no-groups {
+    grid-column: 1 / -1;
+  }
+  body > main:not(.tasks-only):not(.timeline-only):not(.schedule-only) #groups > .group {
+    min-width: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 901px) {
+  main .study .group .task-list.scrolling-tasks {
+    max-height: var(--category-scroll-height) !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+  }
+}
+
+/* Hide scrollbar tracks and thumbs while keeping scrolling available. */
+html, body, body * {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+body *::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+@media (min-width: 901px) {
+  body > main:not(.tasks-only):not(.timeline-only):not(.schedule-only) #groups > .plain-todo-group {
+    padding-bottom: 12px;
+    margin-bottom: -20px;
+  }
+}
