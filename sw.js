@@ -1,4 +1,4 @@
-const CACHE='orbit-v228-20261012';
+const CACHE='orbit-v230-20261012';
 const ASSETS=['./','./index.html','./style.css','./app.js','./firebase-sync.js','./manifest.json','./icon-192.png','./icon-512.png','./icon-180.png','./brand-logo.png','./Dovemayo_gothic.woff2'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('myday-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));

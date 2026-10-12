@@ -467,3 +467,12 @@ html.pointer-input dialog button:focus-visible{outline:none}
 #time-tools summary #duration{margin-left:auto}
 
 #time-tools:not([open]) summary.time-target{margin-bottom:0}
+
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea,[contenteditable=true]{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+img{-webkit-user-drag:none}
+.move-preview{position:fixed!important;z-index:1000;pointer-events:none!important;margin:0!important;background:white;opacity:.95;box-shadow:0 4px 16px #0002;border-radius:12px}
+.touch-moving{opacity:.35}
+
+html,body,body *{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none}
+body input,body textarea,body [contenteditable=true],body [contenteditable=true] *{-webkit-user-select:text!important;user-select:text!important;-webkit-touch-callout:default}
